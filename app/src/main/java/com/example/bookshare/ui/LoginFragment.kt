@@ -46,10 +46,6 @@ class LoginFragment : Fragment() {
                 is LoginViewModel.NavigationCommand.ToSignUpFragment ->{
                     findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
                 }
-
-                is LoginViewModel.NavigationCommand.ShowWrongEmailMessage->{Toast.makeText(activity,"Wrong email! ",Toast.LENGTH_SHORT).show()}  //TODO implement dialog
-
-                is LoginViewModel.NavigationCommand.ShowWrongPasswordMessage->{Toast.makeText(activity,"Wrong password! ",Toast.LENGTH_SHORT).show()}//TODO implement dialog
             }
         }
 

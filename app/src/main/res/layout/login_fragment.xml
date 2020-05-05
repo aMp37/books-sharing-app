@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:gravity="center"
@@ -33,8 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:text="@={viewModel.userName}"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:text="@={viewModel.userName}" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -47,15 +47,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:text="@={viewModel.password}"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:text="@={viewModel.password}" />
 
             <Button
                 android:id="@+id/loginButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Login"
-                android:onClick="@{()->viewModel.login()}"/>
+                android:onClick="@{()->viewModel.login()}"
+                android:text="Login" />
         </LinearLayout>
 
         <LinearLayout
@@ -86,6 +86,28 @@
                 tools:layout_editor_absoluteY="438dp"
                 android:textColor="#FFFFFF"
                 android:backgroundTint="@color/colorPrimaryDark"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout">
+
+            <ImageView
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.emailErrorVisibility}"
+                android:src="@drawable/ic_error_input_black_24dp" />
+
+            <ImageView
+                android:layout_marginTop="35dp"
+                android:layout_width="wrap_content"
+                android:visibility="@{viewModel.passwordErrorVisibility}"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_error_input_black_24dp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

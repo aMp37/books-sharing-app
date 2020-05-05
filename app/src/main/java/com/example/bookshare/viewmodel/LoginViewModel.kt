@@ -1,59 +1,79 @@
 package com.example.bookshare.viewmodel
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.*
 import com.example.bookshare.model.User
+import com.example.bookshare.util.SingleLiveEvent
 
 class LoginViewModel : ViewModel() {
 
-
-    sealed class NavigationCommand{
-        object ToSignUpFragment : NavigationCommand()
-        object ShowWrongEmailMessage: NavigationCommand()
-        object ShowWrongPasswordMessage: NavigationCommand()
-
-    }
-
-    private val mNavigationCommandSender = MutableLiveData<NavigationCommand>()
+    private val mNavigationCommandSender = SingleLiveEvent<NavigationCommand>()
+    private val mUser = User()
 
     private val mUserNameObserver = Observer<String>{
         Log.d("SET",it)
-        user.email= it
+        mUser.email= it
     }
 
     private val mPasswordObserver = Observer<String> {
         Log.d("SET",it)
-        user.password = it
+        mUser.password = it
     }
-
-    private val user = User()
 
     val navigationCommandSender: LiveData<NavigationCommand>
     get() = mNavigationCommandSender
 
-    val userName = MutableLiveData<String>()
-    get() = field
+    //Error messages visibility
+    val emailErrorVisibility = MutableLiveData<Int>().apply { value = View.GONE}
+    val passwordErrorVisibility = MutableLiveData<Int>().apply { value = View.GONE }
 
-    val password = MutableLiveData<String>()
-    get() = field
+    //Input fields observers
+    val userName = MutableLiveData<String>().apply{ observeForever(mUserNameObserver) }
+    val password = MutableLiveData<String>().apply { observeForever(mPasswordObserver) }
 
-    init {
-        userName.observeForever(mUserNameObserver)
-        password.observeForever(mPasswordObserver)
-    }
+
+
 
     fun jumpToSignUp(){
-        println("Test")
-        mNavigationCommandSender.postValue(NavigationCommand.ToSignUpFragment)
+        mNavigationCommandSender.value = NavigationCommand.ToSignUpFragment
     }
+
+    //Input check methods
+    private fun checkEmailIsValid(): Boolean = mUser.email.isNotEmpty()
+    private fun checkPasswordIsValid(): Boolean = mUser.password.isNotEmpty()
 
     fun login(){
 
-        if(user.email == "")
-            mNavigationCommandSender.postValue(NavigationCommand.ShowWrongEmailMessage)
-        else if(user.password == "")
-            mNavigationCommandSender.postValue(NavigationCommand.ShowWrongPasswordMessage)
+        var isInputValid = true
+
+        if(!checkEmailIsValid()){
+            isInputValid = false
+            emailErrorVisibility.value = View.VISIBLE
+        }else{
+            emailErrorVisibility.value = View.INVISIBLE
+        }
+
+        if(!checkPasswordIsValid()){
+            isInputValid = false
+            passwordErrorVisibility.value = View.VISIBLE
+        }else{
+            passwordErrorVisibility.value = View.INVISIBLE
+        }
+
+        if(isInputValid){
             //TODO login to firebase
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        userName.removeObserver(mUserNameObserver)
+        password.removeObserver(mPasswordObserver)
+    }
+
+    sealed class NavigationCommand{
+        object ToSignUpFragment : NavigationCommand()
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -62,11 +82,5 @@ class LoginViewModel : ViewModel() {
             return LoginViewModel() as T
         }
 
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        userName.removeObserver(mUserNameObserver)
-        password.removeObserver(mPasswordObserver)
     }
 }

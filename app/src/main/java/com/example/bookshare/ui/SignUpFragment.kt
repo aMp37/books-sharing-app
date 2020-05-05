@@ -27,6 +27,7 @@ class SignUpFragment : Fragment() {
     ): View? {
         return DataBindingUtil.inflate<SignUpFragmentBinding>(inflater,R.layout.sign_up_fragment,container,false).also {
             binding = it
+            binding.lifecycleOwner = this
         }.root
     }
 
@@ -34,5 +35,4 @@ class SignUpFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         binding.viewModel = viewModel
     }
-
 }
