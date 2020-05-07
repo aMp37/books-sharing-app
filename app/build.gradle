@@ -7,6 +7,7 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 //junit 5
 apply plugin: 'de.mannodermaus.android-junit5'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -54,6 +55,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -61,6 +63,9 @@ dependencies {
     def lifecycle_version = "2.2.0"
     def arch_version = "2.1.0"
 
+    //firebase
+    implementation 'com.google.firebase:firebase-auth:16.0.5'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
     //kodein
     def kodeinVersion = "6.5.5"

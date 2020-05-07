@@ -1,17 +1,21 @@
 package com.example.bookshare.viewmodel
 
+import AuthRepositoryImpl
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.example.bookshare.model.User
+import com.example.bookshare.repository.AuthRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class SignUpViewModel : ViewModel() {
 
     private val mUser = User()
     private val mNavigationCommandSender = MutableLiveData<NavigationCommand>()
+
+    private val mAuthRepository: AuthRepository by lazy { AuthRepositoryImpl() }
+
 
     private val mEmailObserver = Observer<String>{
         Log.d("SET",it)
@@ -76,7 +80,14 @@ class SignUpViewModel : ViewModel() {
         }
 
         if(isInputValid){
-            //TODO create account in Firebase Auth
+
+            viewModelScope.launch {
+                if(mAuthRepository.signUpUser(mUser.email,mUser.password))
+                    Log.d("SIGNUP","OK")
+                else
+                    Log.d("SIGNUP","Error!")
+
+            }
         }
 
     }

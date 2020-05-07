@@ -43,13 +43,20 @@ internal class UserTest {
 
     @Test
     fun set_wrong_password_return_blank_string() {
+        val testedUser = User()
+
+        testedUser.password = "123@"
+        assertEquals("",testedUser.password)
     }
 
     @Test
     fun set_good_password_return_input_value() {
         val testedUser = User()
 
-        testedUser.password = "123@"
-        assertEquals("123@",testedUser.password)
+        testedUser.password = "123@35"
+        assertEquals("123@35",testedUser.password)
+
+        testedUser.password = "aaaaaaaa"
+        assertEquals("aaaaaaaa",testedUser.password)
     }
 }

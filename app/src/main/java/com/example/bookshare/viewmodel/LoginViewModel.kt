@@ -1,15 +1,20 @@
 package com.example.bookshare.viewmodel
 
+import AuthRepositoryImpl
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import com.example.bookshare.model.User
+import com.example.bookshare.repository.AuthRepository
 import com.example.bookshare.util.SingleLiveEvent
+import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
 
     private val mNavigationCommandSender = SingleLiveEvent<NavigationCommand>()
     private val mUser = User()
+
+    private val mAuthRepository: AuthRepository by lazy { AuthRepositoryImpl() }
 
     private val mUserNameObserver = Observer<String>{
         Log.d("SET",it)
@@ -63,6 +68,14 @@ class LoginViewModel : ViewModel() {
 
         if(isInputValid){
             //TODO login to firebase
+
+            viewModelScope.launch {
+                if(mAuthRepository.signInUser(mUser.email,mUser.password))
+                    Log.d("SIGNIN","OK")
+                else
+                    Log.d("SIGNIN","Error!")
+            }
+
         }
     }
 
