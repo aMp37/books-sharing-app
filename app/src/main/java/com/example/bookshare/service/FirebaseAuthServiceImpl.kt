@@ -1,6 +1,6 @@
 package com.example.bookshare.service
 
-import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.*
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 
@@ -30,6 +30,16 @@ class FirebaseAuthServiceImpl(): FirebaseAuthService {
             null
         }
     }
+
+    override suspend fun reAuthCurrentUser(credential: AuthCredential): AuthResult? {
+        return try {
+            mAuth.currentUser!!.reauthenticateAndRetrieveData(credential).await()
+        }catch (e: Exception){
+            e.printStackTrace()
+            null
+        }
+    }
+
 
     override fun logout() = mAuth.signOut()
     override fun currentUser() = mAuth.currentUser

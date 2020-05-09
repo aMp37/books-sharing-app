@@ -14,7 +14,7 @@ class SignUpViewModel : ViewModel() {
     private val mUser = User()
     private val mNavigationCommandSender = MutableLiveData<NavigationCommand>()
 
-    private val mAuthRepository: AuthRepository by lazy { AuthRepositoryImpl() }
+    private val mAuthRepository: AuthRepository<User> by lazy { AuthRepositoryImpl() }
 
 
     private val mEmailObserver = Observer<String>{
@@ -82,7 +82,7 @@ class SignUpViewModel : ViewModel() {
         if(isInputValid){
 
             viewModelScope.launch {
-                if(mAuthRepository.signUpUser(mUser.email,mUser.password))
+                if(mAuthRepository.signUpUser(mUser))
                     Log.d("SIGNUP","OK")
                 else
                     Log.d("SIGNUP","Error!")

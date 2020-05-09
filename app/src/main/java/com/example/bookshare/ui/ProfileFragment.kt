@@ -6,8 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import com.example.bookshare.viewmodel.ProfileViewModel
 import com.example.bookshare.R
+import com.example.bookshare.databinding.ProfileFragmentBinding
 
 
 class ProfileFragment : Fragment() {
@@ -16,19 +19,24 @@ class ProfileFragment : Fragment() {
         fun newInstance() = ProfileFragment()
     }
 
-    private lateinit var viewModel: ProfileViewModel
+    private val viewModel: ProfileViewModel by viewModels()
+    private lateinit var  mBinding: ProfileFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.profile_fragment, container, false)
+        return DataBindingUtil.inflate<ProfileFragmentBinding>(inflater,R.layout.profile_fragment,container,false)
+            .also {
+                mBinding = it
+            }
+            .root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        // TODO: Use the ViewModel
+        mBinding.lifecycleOwner = activity
+        mBinding.viewModel = viewModel
     }
 
 }

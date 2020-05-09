@@ -16,7 +16,7 @@ class LoginViewModel : ViewModel() {
     private val mNavigationCommandSender = SingleLiveEvent<NavigationCommand>()
     private val mUser = User()
 
-    private val mAuthRepository: AuthRepository by lazy { AuthRepositoryImpl() }
+    private val mAuthRepository: AuthRepository<User> by lazy { AuthRepositoryImpl() }
 
     private val mUserNameObserver = Observer<String>{
         Log.d("SET",it)
@@ -72,7 +72,7 @@ class LoginViewModel : ViewModel() {
             //TODO login to firebase
 
             viewModelScope.launch {
-                if(mAuthRepository.signInUser(mUser.email,mUser.password)) {
+                if(mAuthRepository.signInUser(mUser)) {
                     Log.d("SIGNIN", "OK")
                     withContext(Main) {
                         mNavigationCommandSender.value = NavigationCommand.ToMainActivity

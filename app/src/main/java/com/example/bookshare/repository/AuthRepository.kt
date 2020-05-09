@@ -1,11 +1,10 @@
 package com.example.bookshare.repository
 
-import com.google.firebase.auth.FirebaseUser
-
-interface AuthRepository {
-    suspend fun signInUser(email: String, password: String): Boolean
-    suspend fun signUpUser(email: String, password: String): Boolean
-
+interface AuthRepository<T> {
+    suspend fun signInUser(user: T): Boolean
+    suspend fun signUpUser(user: T): Boolean
+    suspend fun updateCurrentUser(oldPassword: String, user: T): Boolean
     fun signOutUser()
-    fun getCurrentUser(): FirebaseUser?
+    fun getCurrentUser(): T
+
 }
