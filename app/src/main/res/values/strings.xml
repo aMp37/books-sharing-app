@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Book Share</string>
+    <string name="bottom_nav_home_label">Home</string>
+    <string name="bottom_nav_my_profile_label">My Profile</string>
 </resources>

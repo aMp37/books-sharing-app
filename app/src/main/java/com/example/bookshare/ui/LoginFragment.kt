@@ -46,6 +46,10 @@ class LoginFragment : Fragment() {
                 is LoginViewModel.NavigationCommand.ToSignUpFragment ->{
                     findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
                 }
+
+                is LoginViewModel.NavigationCommand.ToMainActivity->{
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainActivity())
+                }
             }
         }
 

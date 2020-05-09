@@ -7,7 +7,9 @@ import androidx.lifecycle.*
 import com.example.bookshare.model.User
 import com.example.bookshare.repository.AuthRepository
 import com.example.bookshare.util.SingleLiveEvent
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginViewModel : ViewModel() {
 
@@ -70,8 +72,12 @@ class LoginViewModel : ViewModel() {
             //TODO login to firebase
 
             viewModelScope.launch {
-                if(mAuthRepository.signInUser(mUser.email,mUser.password))
-                    Log.d("SIGNIN","OK")
+                if(mAuthRepository.signInUser(mUser.email,mUser.password)) {
+                    Log.d("SIGNIN", "OK")
+                    withContext(Main) {
+                        mNavigationCommandSender.value = NavigationCommand.ToMainActivity
+                    }
+                }
                 else
                     Log.d("SIGNIN","Error!")
             }
@@ -87,6 +93,7 @@ class LoginViewModel : ViewModel() {
 
     sealed class NavigationCommand{
         object ToSignUpFragment : NavigationCommand()
+        object ToMainActivity: NavigationCommand()
     }
 
     @Suppress("UNCHECKED_CAST")

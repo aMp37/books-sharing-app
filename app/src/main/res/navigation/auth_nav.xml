@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/auth_nav"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_nav"
     app:startDestination="@id/loginFragment">
 
     <fragment
@@ -10,9 +12,17 @@
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.example.bookshare.ui.SignUpFragment"
         android:label="SignUpFragment" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.bookshare.ui.MainActivity"
+        android:label="activity_main2"
+        tools:layout="@layout/activity_main2" />
 </navigation>
