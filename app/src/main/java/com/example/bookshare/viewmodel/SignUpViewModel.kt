@@ -32,6 +32,7 @@ class SignUpViewModel : ViewModel() {
         mUser.displayName = it
     }
 
+    val networkState = mAuthRepository.networkState
 
     // Error messages visibility
     val emailErrorVisibility = MutableLiveData<Int>().apply { value = View.GONE}

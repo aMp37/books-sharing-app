@@ -15,6 +15,7 @@ class FirebaseAuthServiceImpl(): FirebaseAuthService {
             mAuth.signInWithEmailAndPassword(email,password).await()
         }catch (e: Exception){
             e.printStackTrace()
+            throw e
             null
         }
     }
@@ -27,6 +28,7 @@ class FirebaseAuthServiceImpl(): FirebaseAuthService {
             mAuth.createUserWithEmailAndPassword(email,password).await()
         }catch (e: Exception){
             e.printStackTrace()
+            throw e
             null
         }
     }
@@ -36,6 +38,7 @@ class FirebaseAuthServiceImpl(): FirebaseAuthService {
             mAuth.currentUser!!.reauthenticateAndRetrieveData(credential).await()
         }catch (e: Exception){
             e.printStackTrace()
+            throw e
             null
         }
     }

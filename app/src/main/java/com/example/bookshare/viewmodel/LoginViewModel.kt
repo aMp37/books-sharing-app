@@ -39,8 +39,7 @@ class LoginViewModel : ViewModel() {
     val userName = MutableLiveData<String>().apply{ observeForever(mUserNameObserver) }
     val password = MutableLiveData<String>().apply { observeForever(mPasswordObserver) }
 
-
-
+    val loadingState = mAuthRepository.networkState
 
     fun jumpToSignUp(){
         mNavigationCommandSender.value = NavigationCommand.ToSignUpFragment
