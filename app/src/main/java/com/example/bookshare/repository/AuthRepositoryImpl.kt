@@ -95,6 +95,7 @@ class AuthRepositoryImpl(): AuthRepository<User> {
         return User().apply {
             email = mFirebaseAuthService.currentUser()?.email?:""
             displayName = mFirebaseAuthService.currentUser()?.displayName?:""
+            photoUrl = "https://img2.pngio.com/united-states-avatar-organization-information-png-512x512px-user-avatar-png-820_512.jpg"
         }
     }
 }

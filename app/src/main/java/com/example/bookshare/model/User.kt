@@ -19,4 +19,5 @@ class User{
     }
 
     var displayName: String = ""
+    var photoUrl: String = ""
 }

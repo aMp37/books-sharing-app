@@ -11,10 +11,8 @@ class ProfileViewModel : ViewModel() {
 
     private val mAuthRepository: AuthRepository<User> by lazy { AuthRepositoryImpl() }
 
-    val userName = MutableLiveData<String>().apply {
-        mAuthRepository.getCurrentUser()?.let {
-            value = it.displayName
-        }
+    val user = MutableLiveData<User>().apply {
+        value = mAuthRepository.getCurrentUser()
     }
 
     @Suppress("UNCHECKED_CAST")
