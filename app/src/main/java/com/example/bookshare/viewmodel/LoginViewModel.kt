@@ -68,8 +68,6 @@ class LoginViewModel : ViewModel() {
         }
 
         if(isInputValid){
-            //TODO login to firebase
-
             viewModelScope.launch {
                 if(mAuthRepository.signInUser(mUser)) {
                     Log.d("SIGNIN", "OK")

@@ -6,6 +6,7 @@ import android.view.View
 import androidx.lifecycle.*
 import com.example.bookshare.model.User
 import com.example.bookshare.repository.AuthRepository
+import com.example.bookshare.util.UiAvatarsUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -81,6 +82,8 @@ class SignUpViewModel : ViewModel() {
         }
 
         if(isInputValid){
+
+            mUser.photoUrl = UiAvatarsUtil.getAvatarUrlByDisplayName(mUser.displayName)
 
             viewModelScope.launch {
                 if(mAuthRepository.signUpUser(mUser))

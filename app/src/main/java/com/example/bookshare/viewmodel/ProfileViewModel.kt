@@ -23,7 +23,6 @@ class ProfileViewModel : ViewModel() {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return ProfileViewModel() as T
         }
-
     }
 
     fun jumpToEditProfile(){

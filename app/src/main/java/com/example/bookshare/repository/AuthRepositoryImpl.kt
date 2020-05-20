@@ -5,6 +5,7 @@ import com.example.bookshare.model.User
 import com.example.bookshare.repository.AuthRepository
 import com.example.bookshare.service.FirebaseAuthService
 import com.example.bookshare.service.FirebaseAuthServiceImpl
+import com.example.bookshare.util.UiAvatarsUtil
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -51,7 +52,7 @@ class AuthRepositoryImpl(): AuthRepository<User> {
             if(result!=null){
                 mFirebaseAuthService.currentUser()?.updateProfile(UserProfileChangeRequest.Builder()
                     .setDisplayName(user.displayName)
-                    .setPhotoUri("https://img2.pngio.com/united-states-avatar-organization-information-png-512x512px-user-avatar-png-820_512.jpg".toUri())  //Todo take picture
+                    .setPhotoUri(user.photoUrl.toUri())
                     .build())
                 mNetworkState.postValue(AuthRepository.NetworkState.Success)
                 return true
@@ -65,19 +66,19 @@ class AuthRepositoryImpl(): AuthRepository<User> {
     override suspend fun updateCurrentUser(oldPassword: String, newUser: User): Boolean {
         try{
             mNetworkState.postValue(AuthRepository.NetworkState.Loading)
+
+            mFirebaseAuthService.currentUser()?.updateProfile(UserProfileChangeRequest.Builder()
+                .setDisplayName(newUser.displayName)
+                .setPhotoUri(newUser.photoUrl.toUri())
+                .build())
+
             val reAuthResult = mFirebaseAuthService.reAuthCurrentUser(EmailAuthProvider.getCredential(
                 getCurrentUser().email,
                 oldPassword
             ))
 
             if(reAuthResult!= null){
-                    mFirebaseAuthService.currentUser()!!.updateEmail(newUser.email)
-                    mFirebaseAuthService.currentUser()!!.updatePassword(newUser.password)
-                    mFirebaseAuthService.currentUser()!!.updateProfile(UserProfileChangeRequest.Builder()
-                        .setDisplayName(newUser.displayName)
-                        .setPhotoUri("https://img2.pngio.com/united-states-avatar-organization-information-png-512x512px-user-avatar-png-820_512.jpg".toUri())  //Todo take picture
-                        .build())
-
+                    mFirebaseAuthService.currentUser()?.updatePassword(newUser.password)
                     mNetworkState.postValue(AuthRepository.NetworkState.Success)
                     return true
             }
@@ -95,7 +96,7 @@ class AuthRepositoryImpl(): AuthRepository<User> {
         return User().apply {
             email = mFirebaseAuthService.currentUser()?.email?:""
             displayName = mFirebaseAuthService.currentUser()?.displayName?:""
-            photoUrl = "https://img2.pngio.com/united-states-avatar-organization-information-png-512x512px-user-avatar-png-820_512.jpg"
+            photoUrl = mFirebaseAuthService.currentUser()?.photoUrl.toString()?:""
         }
     }
 }
