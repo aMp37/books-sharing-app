@@ -58,6 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit"
+            android:onClick="@{()->viewModel.jumpToEditProfile()}"
             android:textColor="#FFFFFF"
             android:backgroundTint="@color/colorPrimaryDark"/>
 

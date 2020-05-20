@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import com.example.bookshare.viewmodel.ProfileViewModel
 import com.example.bookshare.R
 import com.example.bookshare.databinding.ProfileFragmentBinding
@@ -37,6 +40,11 @@ class ProfileFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         mBinding.lifecycleOwner = activity
         mBinding.viewModel = viewModel
+
+        viewModel.navigationCommandSender.observe(activity as LifecycleOwner) {
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment())
+        }
+
     }
 
 }

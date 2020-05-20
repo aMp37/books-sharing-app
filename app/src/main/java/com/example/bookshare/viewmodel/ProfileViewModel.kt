@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.bookshare.model.User
 import com.example.bookshare.repository.AuthRepository
+import com.example.bookshare.util.SingleLiveEvent
 
 class ProfileViewModel : ViewModel() {
 
@@ -15,11 +16,21 @@ class ProfileViewModel : ViewModel() {
         value = mAuthRepository.getCurrentUser()
     }
 
+    val navigationCommandSender = SingleLiveEvent<NavigationCommand>()
+
     @Suppress("UNCHECKED_CAST")
     class Factory: ViewModelProvider.Factory{
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return ProfileViewModel() as T
         }
 
+    }
+
+    fun jumpToEditProfile(){
+        navigationCommandSender.value = NavigationCommand.ToProfileEditFragment
+    }
+
+    sealed class NavigationCommand{
+        object ToProfileEditFragment: NavigationCommand()
     }
 }
