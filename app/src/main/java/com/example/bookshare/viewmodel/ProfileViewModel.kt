@@ -10,7 +10,7 @@ import com.example.bookshare.util.SingleLiveEvent
 
 class ProfileViewModel : ViewModel() {
 
-    private val mAuthRepository: AuthRepository<User> by lazy { AuthRepositoryImpl() }
+    private val mAuthRepository: AuthRepository<User> by lazy { AuthRepositoryImpl }
 
     val user = MutableLiveData<User>().apply {
         value = mAuthRepository.getCurrentUser()
@@ -29,7 +29,17 @@ class ProfileViewModel : ViewModel() {
         navigationCommandSender.value = NavigationCommand.ToProfileEditFragment
     }
 
+    fun jumpToLoginScreen(){
+        navigationCommandSender.value = NavigationCommand.ToLoginScreen
+    }
+
+    fun logoutUser(){
+        mAuthRepository.signOutUser()
+        jumpToLoginScreen()
+    }
+
     sealed class NavigationCommand{
         object ToProfileEditFragment: NavigationCommand()
+        object ToLoginScreen: NavigationCommand()
     }
 }

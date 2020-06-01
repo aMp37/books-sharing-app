@@ -1,11 +1,50 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="textInputStyle">@style/TextInputEditTextPrimaryColor</item>-->
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.TransparentTheme">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+
+
+    <style name="Widget.MaterialComponents.Button.TextButton.MaterialSignUpTextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="MaterialButtonPrimaryColor" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="ProgressBarPrimaryColor">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
+    <style name="ProgressBarWhite">
+        <item name="colorControlActivated">@android:color/white</item>
+    </style>
+
+    <style name="Base.Widget.MaterialComponents.TextInputLayout.AuthEditTestStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="backgroundTint">#CCFFFFFF</item>
+        <item name="boxCornerRadiusBottomEnd">15dp</item>
+        <item name="boxCornerRadiusTopStart">15dp</item>
+    </style>
+
+    <style name="Widget.MaterialComponents.BottomNavigationView.PrimarySurface.WhiteNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#212121</item>
     </style>
 
 </resources>

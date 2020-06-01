@@ -14,39 +14,38 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.lang.NullPointerException
 
-class AuthRepositoryImpl(): AuthRepository<User> {
+object AuthRepositoryImpl: AuthRepository<User> {
     private val mFirebaseAuthService: FirebaseAuthService by lazy {
         FirebaseAuthServiceImpl()
     }
 
     private val mNetworkState = MutableLiveData<AuthRepository.NetworkState>().apply {
-        value = AuthRepository.NetworkState.Success
+        value = AuthRepository.NetworkState.Success(AuthRepository.Operation.LOGIN)
     }
-
     override val networkState: LiveData<AuthRepository.NetworkState>
     get() = mNetworkState
 
     override suspend fun signInUser(user: User): Boolean {
         try{
             val result = withContext(IO) {
-                mNetworkState.postValue(AuthRepository.NetworkState.Loading)
+                mNetworkState.postValue(AuthRepository.NetworkState.Loading(AuthRepository.Operation.LOGIN))
                 mFirebaseAuthService.loginWithEmailAndPassword(user.email,user.password)
             }
 
             if(result!=null){
-                mNetworkState.postValue(AuthRepository.NetworkState.Success)
+                mNetworkState.postValue(AuthRepository.NetworkState.Success(AuthRepository.Operation.LOGIN))
                 return true
             }
 
         }catch (e: Exception){  //TODO specify error code by exception type
-            mNetworkState.postValue(AuthRepository.NetworkState.Error(-1))
+            mNetworkState.postValue(AuthRepository.NetworkState.Error(AuthRepository.Operation.LOGIN,-1))
         }
         return false
     }
 
     override suspend fun signUpUser(user: User): Boolean {
         try {
-            mNetworkState.postValue(AuthRepository.NetworkState.Loading)
+            mNetworkState.postValue(AuthRepository.NetworkState.Loading(AuthRepository.Operation.SIGNUP))
             val result = mFirebaseAuthService.registerWithEmailAndPassword(user.email,user.password)
 
             if(result!=null){
@@ -54,18 +53,18 @@ class AuthRepositoryImpl(): AuthRepository<User> {
                     .setDisplayName(user.displayName)
                     .setPhotoUri(user.photoUrl.toUri())
                     .build())
-                mNetworkState.postValue(AuthRepository.NetworkState.Success)
+                mNetworkState.postValue(AuthRepository.NetworkState.Success(AuthRepository.Operation.SIGNUP))
                 return true
             }
         }catch (e:Exception){   //TODO specify error code by exception type
-            mNetworkState.postValue(AuthRepository.NetworkState.Error(-1))
+            mNetworkState.postValue(AuthRepository.NetworkState.Error(AuthRepository.Operation.SIGNUP,-2))
         }
         return false
     }
 
     override suspend fun updateCurrentUser(oldPassword: String, newUser: User): Boolean {
         try{
-            mNetworkState.postValue(AuthRepository.NetworkState.Loading)
+            mNetworkState.postValue(AuthRepository.NetworkState.Loading(AuthRepository.Operation.UPDATE))
 
             mFirebaseAuthService.currentUser()?.updateProfile(UserProfileChangeRequest.Builder()
                 .setDisplayName(newUser.displayName)
@@ -73,17 +72,17 @@ class AuthRepositoryImpl(): AuthRepository<User> {
                 .build())
 
             val reAuthResult = mFirebaseAuthService.reAuthCurrentUser(EmailAuthProvider.getCredential(
-                getCurrentUser().email,
+                getCurrentUser()!!.email,
                 oldPassword
             ))
 
             if(reAuthResult!= null){
                     mFirebaseAuthService.currentUser()?.updatePassword(newUser.password)
-                    mNetworkState.postValue(AuthRepository.NetworkState.Success)
+                    mNetworkState.postValue(AuthRepository.NetworkState.Success(AuthRepository.Operation.UPDATE))
                     return true
             }
         }catch (e: Exception){
-            mNetworkState.postValue(AuthRepository.NetworkState.Error(-1))
+            mNetworkState.postValue(AuthRepository.NetworkState.Error(AuthRepository.Operation.UPDATE,-3))
         }
         return false
     }
@@ -92,11 +91,14 @@ class AuthRepositoryImpl(): AuthRepository<User> {
         mFirebaseAuthService.logout()
     }
 
-    override fun getCurrentUser(): User {
-        return User().apply {
-            email = mFirebaseAuthService.currentUser()?.email?:""
-            displayName = mFirebaseAuthService.currentUser()?.displayName?:""
-            photoUrl = mFirebaseAuthService.currentUser()?.photoUrl.toString()?:""
+    override fun getCurrentUser(): User? {
+        var currentUser: User? = null
+        mFirebaseAuthService.currentUser()?.let {
+            currentUser = User().apply {
+                email = it.email!!
+                displayName = it.displayName!!
+            }
         }
+        return currentUser
     }
 }

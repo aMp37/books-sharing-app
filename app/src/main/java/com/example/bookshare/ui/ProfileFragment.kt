@@ -42,7 +42,11 @@ class ProfileFragment : Fragment() {
         mBinding.viewModel = viewModel
 
         viewModel.navigationCommandSender.observe(activity as LifecycleOwner) {
-            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment())
+            when(it){
+                ProfileViewModel.NavigationCommand.ToProfileEditFragment->findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment())
+                ProfileViewModel.NavigationCommand.ToLoginScreen->findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToAuthActivity())
+            }
+
         }
 
     }

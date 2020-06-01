@@ -8,11 +8,19 @@ interface AuthRepository<T> {
     suspend fun signUpUser(user: T): Boolean
     suspend fun updateCurrentUser(oldPassword: String, user: T): Boolean
     fun signOutUser()
-    fun getCurrentUser(): T
+    fun getCurrentUser(): T?
 
+    //-1 login error
+    //-2 signup error
     sealed class NetworkState{
-        object Loading: NetworkState()
-        object Success: NetworkState()
-        data class Error(val errorCode: Int): NetworkState()
+        data class Loading(val operation: Operation): NetworkState()
+        data class Success(val operation: Operation): NetworkState()
+        data class Error(val operation: Operation, val errorCode: Int): NetworkState()
+    }
+
+    enum class Operation{
+        LOGIN,
+        SIGNUP,
+        UPDATE
     }
 }

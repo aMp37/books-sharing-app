@@ -10,65 +10,75 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background = "@drawable/auth_screen_gradient"
         tools:context=".ui.LoginFragment">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            style="@style/Base.Widget.MaterialComponents.TextInputLayout.AuthEditTestStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:gravity="center"
-            android:orientation="vertical"
+            android:hint="Email"
+            app:endIconMode="clear_text"
+            app:endIconDrawable="@drawable/ic_cancel_black_24dp"
+            app:startIconDrawable="@drawable/ic_email_black_24dp"
+            android:theme="@style/Base.Widget.MaterialComponents.TextInputLayout.AuthEditTestStyle"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="E-mail" />
-
-            <EditText
-                android:id="@+id/emailEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="250dp"
                 android:inputType="textEmailAddress"
+                android:layout_height="wrap_content"
                 android:text="@={viewModel.userName}" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Password" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/passwordEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout3"
+            style="@style/Base.Widget.MaterialComponents.TextInputLayout.AuthEditTestStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:hint="Password"
+            app:endIconMode="password_toggle"
+            app:startIconDrawable="@drawable/ic_lock_black_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:inputType="textPassword"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
                 android:text="@={viewModel.password}" />
 
-            <Button
-                android:id="@+id/loginButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{()->viewModel.login()}"
-                android:text="Login" />
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:onClick="@{()->viewModel.login()}"
+            android:text="Log in!"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
         <ProgressBar
+            android:theme="@style/ProgressBarPrimaryColor"
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
             android:layout_marginBottom="36dp"
-
             android:backgroundTint="@color/colorPrimaryDark"
             android:progressBackgroundTint="@color/colorPrimaryDark"
-
             android:visibility="@{viewModel.loadingState}"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +95,6 @@
             app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             app:layout_constraintVertical_bias="0.883"
             tools:visibility="visible" />
 
@@ -105,6 +114,7 @@
                 android:text="No account ?" />
 
             <Button
+                style="@style/Widget.MaterialComponents.Button.TextButton.MaterialSignUpTextButton"
                 android:layout_marginTop="15dp"
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
@@ -114,33 +124,42 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="438dp"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="@color/colorPrimaryDark"/>
+                tools:layout_editor_absoluteY="438dp"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout3"
+        <TextView
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout">
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/alex_brush"
+            android:text="Book Share"
+            android:textColor="@android:color/white"
+            android:textSize="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:src="@drawable/ic_error_input_black_24dp"
-                android:visibility="@{viewModel.emailErrorVisibility}" />
+        <!--        <LinearLayout-->
+<!--            android:id="@+id/linearLayout3"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
-                android:src="@drawable/ic_error_input_black_24dp"
-                android:visibility="@{viewModel.passwordErrorVisibility}" />
-        </LinearLayout>
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="30dp"-->
+<!--                android:src="@drawable/ic_error_input_black_24dp"-->
+<!--                android:visibility="@{viewModel.emailErrorVisibility}" />-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="35dp"-->
+<!--                android:src="@drawable/ic_error_input_black_24dp"-->
+<!--                android:visibility="@{viewModel.passwordErrorVisibility}" />-->
+<!--        </LinearLayout>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

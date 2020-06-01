@@ -16,7 +16,7 @@ class LoginViewModel : ViewModel() {
     private val mNavigationCommandSender = SingleLiveEvent<NavigationCommand>()
     private val mUser = User()
 
-    private val mAuthRepository: AuthRepository<User> by lazy { AuthRepositoryImpl() }
+    private val mAuthRepository: AuthRepository<User> by lazy { AuthRepositoryImpl }
 
     private val mUserNameObserver = Observer<String>{
         Log.d("SET",it)
@@ -26,6 +26,14 @@ class LoginViewModel : ViewModel() {
     private val mPasswordObserver = Observer<String> {
         Log.d("SET",it)
         mUser.password = it
+    }
+
+    private val mNetworkStateObserver = Observer<AuthRepository.NetworkState>{
+        when(it){
+            is AuthRepository.NetworkState.Loading->{
+                mNavigationCommandSender.value = NavigationCommand.ToSplashFragment
+            }
+        }
     }
 
     val navigationCommandSender: LiveData<NavigationCommand>
@@ -40,6 +48,16 @@ class LoginViewModel : ViewModel() {
     val password = MutableLiveData<String>().apply { observeForever(mPasswordObserver) }
 
     val loadingState = mAuthRepository.networkState
+
+
+    init {
+        mAuthRepository.networkState.observeForever(mNetworkStateObserver)
+    }
+
+    fun checkForActiveSession(){
+        if(mAuthRepository.getCurrentUser()!=null)  //check for user session is active and skip login case
+            mNavigationCommandSender.value = NavigationCommand.ToMainActivity
+    }
 
     fun jumpToSignUp(){
         mNavigationCommandSender.value = NavigationCommand.ToSignUpFragment
@@ -71,14 +89,10 @@ class LoginViewModel : ViewModel() {
             viewModelScope.launch {
                 if(mAuthRepository.signInUser(mUser)) {
                     Log.d("SIGNIN", "OK")
-                    withContext(Main) {
-                        mNavigationCommandSender.value = NavigationCommand.ToMainActivity
-                    }
                 }
                 else
                     Log.d("SIGNIN","Error!")
             }
-
         }
     }
 
@@ -86,11 +100,14 @@ class LoginViewModel : ViewModel() {
         super.onCleared()
         userName.removeObserver(mUserNameObserver)
         password.removeObserver(mPasswordObserver)
+        mAuthRepository.networkState.removeObserver(mNetworkStateObserver)
     }
 
     sealed class NavigationCommand{
         object ToSignUpFragment : NavigationCommand()
         object ToMainActivity: NavigationCommand()
+        object ToSplashFragment: NavigationCommand()
+        object FromSplashFragmentToMainActivity: NavigationCommand()
     }
 
     @Suppress("UNCHECKED_CAST")

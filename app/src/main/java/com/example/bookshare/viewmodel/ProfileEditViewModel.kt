@@ -14,7 +14,7 @@ class ProfileEditViewModel : ViewModel() {
 
     val navigationCommandSender = SingleLiveEvent<NavigationCommand>()
 
-    private val mAuthRepository: AuthRepository<User> by lazy { AuthRepositoryImpl() }
+    private val mAuthRepository: AuthRepository<User> by lazy { AuthRepositoryImpl }
 
     val editUser: MutableLiveData<User> by lazy { MutableLiveData<User>(mAuthRepository.getCurrentUser()) }
 

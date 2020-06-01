@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import com.example.bookshare.AuthSplashFragmentDirections
 import com.example.bookshare.viewmodel.LoginViewModel
 import com.example.bookshare.R
 import com.example.bookshare.databinding.LoginFragmentBinding
@@ -38,21 +39,18 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         binding.viewModel = viewModel
-
         viewModel.navigationCommandSender.observe(this as LifecycleOwner) {
             when(it){
                 is LoginViewModel.NavigationCommand.ToSignUpFragment ->{
                     findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
                 }
 
-                is LoginViewModel.NavigationCommand.ToMainActivity->{
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMainActivity())
+                is LoginViewModel.NavigationCommand.ToSplashFragment->{
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToAuthSplashFragment())
                 }
             }
         }
-
+        viewModel.checkForActiveSession()
     }
-
 }
