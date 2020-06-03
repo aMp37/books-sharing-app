@@ -31,7 +31,8 @@ class LoginViewModel : ViewModel() {
     private val mNetworkStateObserver = Observer<AuthRepository.NetworkState>{
         when(it){
             is AuthRepository.NetworkState.Loading->{
-                mNavigationCommandSender.value = NavigationCommand.ToSplashFragment
+                if(it.operation == AuthRepository.Operation.LOGIN)
+                    mNavigationCommandSender.value = NavigationCommand.ToSplashFragment
             }
         }
     }

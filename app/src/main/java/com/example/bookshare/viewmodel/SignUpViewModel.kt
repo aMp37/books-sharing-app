@@ -6,6 +6,7 @@ import android.view.View
 import androidx.lifecycle.*
 import com.example.bookshare.model.User
 import com.example.bookshare.repository.AuthRepository
+import com.example.bookshare.util.SingleLiveEvent
 import com.example.bookshare.util.UiAvatarsUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -13,9 +14,19 @@ import kotlinx.coroutines.launch
 class SignUpViewModel : ViewModel() {
 
     private val mUser = User()
-    private val mNavigationCommandSender = MutableLiveData<NavigationCommand>()
+    private val mNavigationCommandSender = SingleLiveEvent<NavigationCommand>()
 
     private val mAuthRepository: AuthRepository<User> by lazy { AuthRepositoryImpl }
+
+    private val mNetworkStateObserver = Observer<AuthRepository.NetworkState>{
+        when(it){
+            is AuthRepository.NetworkState.Loading->{
+                if(it.operation == AuthRepository.Operation.SIGNUP)
+                    mNavigationCommandSender.value = NavigationCommand.ToSplashFragment
+            }
+        }
+    }
+
 
 
     private val mEmailObserver = Observer<String>{
@@ -35,6 +46,9 @@ class SignUpViewModel : ViewModel() {
 
     val networkState = mAuthRepository.networkState
 
+    val navigationCommandSender: LiveData<NavigationCommand>
+        get() = mNavigationCommandSender
+
     // Error messages visibility
     val emailErrorVisibility = MutableLiveData<Int>().apply { value = View.GONE}
     val passwordErrorVisibility = MutableLiveData<Int>().apply { value = View.GONE }
@@ -51,6 +65,10 @@ class SignUpViewModel : ViewModel() {
     private fun checkEmailIsValid(): Boolean = mUser.email.isNotEmpty()
     private fun checkPasswordIsValid(): Boolean = mUser.password.isNotEmpty()
     private fun checkDisplayNameIsValid(): Boolean = mUser.displayName.isNotEmpty()
+
+    init {
+        networkState.observeForever(mNetworkStateObserver)
+    }
 
 
     fun confirmAccount(){
@@ -102,11 +120,13 @@ class SignUpViewModel : ViewModel() {
         email.removeObserver(mEmailObserver)
         password.removeObserver(mPasswordObserver)
         displayName.removeObserver(mDisplayNameObserver)
+        networkState.removeObserver(mNetworkStateObserver)
     }
 
 
     sealed class NavigationCommand{
-        object ToLoginUpFragment : NavigationCommand()
+        object ToLoginFragment : NavigationCommand()
+        object ToSplashFragment: NavigationCommand()
     }
 
     @Suppress("UNCHECKED_CAST")

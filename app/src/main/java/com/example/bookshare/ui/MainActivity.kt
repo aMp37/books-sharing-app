@@ -21,8 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpNavigation() {
 
-
-
         NavigationUI.setupWithNavController(app_bottom_nav,app_nav_host.findNavController())
        app_nav_host.findNavController().addOnDestinationChangedListener{_,destination,_->
             when(destination.id){
@@ -35,7 +33,4 @@ class MainActivity : AppCompatActivity() {
         app_nav_host.findNavController().graph.startDestination = app_nav_host.findNavController().currentDestination!!.id
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 }

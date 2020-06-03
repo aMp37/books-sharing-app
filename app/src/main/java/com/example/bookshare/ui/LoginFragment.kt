@@ -7,15 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import com.example.bookshare.AuthSplashFragmentDirections
 import com.example.bookshare.viewmodel.LoginViewModel
 import com.example.bookshare.R
 import com.example.bookshare.databinding.LoginFragmentBinding
+import com.example.bookshare.repository.AuthRepository
 
 
 class LoginFragment : Fragment() {
@@ -27,6 +29,13 @@ class LoginFragment : Fragment() {
     private val viewModel: LoginViewModel by viewModels { LoginViewModel.Factory() }
     private lateinit var binding: LoginFragmentBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this){
+            (activity as AuthActivity).finish()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,6 +45,7 @@ class LoginFragment : Fragment() {
             binding.lifecycleOwner = this
         }.root
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

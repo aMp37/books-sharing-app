@@ -93,12 +93,16 @@ object AuthRepositoryImpl: AuthRepository<User> {
 
     override fun getCurrentUser(): User? {
         var currentUser: User? = null
-        mFirebaseAuthService.currentUser()?.let {
-            currentUser = User().apply {
-                email = it.email!!
-                displayName = it.displayName!!
+        try{
+            mFirebaseAuthService.currentUser()?.let {
+                currentUser = User().apply {
+                    email = it.email!!
+                    displayName = it.displayName!!
+                }
             }
+        }catch (e: NullPointerException){}
+        finally {
+            return currentUser
         }
-        return currentUser
     }
 }
